@@ -76,19 +76,13 @@
 
       h1,
       h2,
-      h3,
       p {
         margin: 0;
       }
 
       h1,
-      h2,
-      h3,
       .brand,
-      .peer-name,
-      .peer-percent,
-      .total-value,
-      .stat-value,
+      .chart-center,
       .confirmation h2 {
         font-family: "Playfair Display", Georgia, serif;
       }
@@ -96,7 +90,7 @@
       .page {
         width: min(100%, 1280px);
         margin: 0 auto;
-        padding: 32px 64px 64px;
+        padding: 18px 64px 40px;
       }
 
       .topbar {
@@ -104,13 +98,13 @@
         align-items: center;
         justify-content: space-between;
         gap: 24px;
-        padding-bottom: 16px;
+        padding-bottom: 14px;
         border-bottom: 1px solid var(--outline-variant);
       }
 
       .brand {
         color: var(--primary);
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 700;
         line-height: 1.1;
         letter-spacing: 0;
@@ -120,170 +114,45 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        border: 1px solid var(--outline-variant);
+        width: 34px;
+        height: 34px;
+        border: 1px solid transparent;
         border-radius: 9999px;
         color: var(--primary);
-        background: var(--surface-low);
+        background: transparent;
         font-size: 21px;
       }
 
-      .intro {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 320px;
-        gap: 32px;
-        align-items: end;
-        padding: 32px 0;
-      }
-
-      .eyebrow,
-      label,
-      .microcopy,
-      .stat-label,
-      .global-error,
-      .error,
-      .chart-label,
-      .legend-value,
-      .member-chip,
-      button {
-        font-family: "Hanken Grotesk", Arial, sans-serif;
-        text-transform: uppercase;
-      }
-
-      .eyebrow,
-      label,
-      .microcopy,
-      .stat-label,
-      .global-error,
-      .error,
-      .chart-label,
-      .member-chip {
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        line-height: 1;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--tertiary);
+      .page-header {
+        padding: 32px 0 26px;
       }
 
       .display-title {
-        max-width: 760px;
-        margin-top: 16px;
         color: var(--primary);
-        font-size: 48px;
+        font-size: 40px;
         font-weight: 700;
-        line-height: 1.1;
+        line-height: 1.15;
         letter-spacing: 0;
       }
 
       .intro-copy {
         max-width: 720px;
-        margin-top: 16px;
+        margin-top: 8px;
         color: var(--on-surface-variant);
         font-size: 18px;
         line-height: 1.6;
       }
 
-      .stat-panel {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1px;
-        overflow: hidden;
-        border: 1px solid var(--outline-variant);
-        border-radius: 1.5rem;
-        background: var(--outline-variant);
-      }
-
-      .stat {
-        min-width: 0;
-        padding: 20px;
-        background: var(--surface-low);
-      }
-
-      .stat-value {
-        color: var(--primary);
-        font-size: 32px;
-        font-weight: 700;
-        line-height: 1;
-      }
-
-      .stat-label {
-        margin-top: 8px;
-        color: var(--on-surface-variant);
-        font-size: 12px;
-        font-weight: 500;
-      }
-
       .workspace {
+        display: block;
+      }
+
+      .form-flow {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
         gap: 32px;
       }
 
-      .form-shell,
-      .chart-shell,
-      .confirmation {
-        border: 1px solid var(--outline-variant);
-        border-radius: 1.5rem;
-        background: var(--surface-low);
-      }
-
-      .form-shell {
-        padding: 32px;
-      }
-
-      .section-head {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 24px;
-        align-items: start;
-        padding-bottom: 24px;
-        border-bottom: 1px solid var(--outline-variant);
-      }
-
-      .section-title {
-        margin-top: 8px;
-        color: var(--on-surface);
-        font-size: 32px;
-        font-weight: 600;
-        line-height: 1.2;
-      }
-
-      .section-copy,
-      .subsection-copy,
-      .chart-copy,
-      .helper,
-      .confirmation p,
-      .footer-note {
-        color: var(--on-surface-variant);
-      }
-
-      .section-copy {
-        max-width: 760px;
-        margin-top: 8px;
-      }
-
-      .section-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        min-height: 32px;
-        padding: 0 14px;
-        border-radius: 9999px;
-        background: var(--tertiary-container);
-        color: var(--on-surface);
-        font-size: 12px;
-        font-weight: 500;
-      }
-
       .global-error {
-        margin-top: 24px;
         padding: 14px 16px;
         border: 1px solid var(--error);
         border-radius: 0.5rem;
@@ -295,11 +164,33 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 24px;
-        margin-top: 32px;
       }
 
       .field {
         min-width: 0;
+      }
+
+      label,
+      .chart-label,
+      .global-error,
+      .error,
+      .member-chip,
+      .total-bar,
+      button {
+        font-family: "Hanken Grotesk", Arial, sans-serif;
+        text-transform: uppercase;
+      }
+
+      label,
+      .chart-label,
+      .global-error,
+      .error,
+      .member-chip,
+      .total-bar {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        line-height: 1;
       }
 
       label {
@@ -309,6 +200,7 @@
       }
 
       input[type="text"],
+      input[type="number"],
       select,
       textarea {
         width: 100%;
@@ -322,23 +214,25 @@
       }
 
       input[type="text"],
+      input[type="number"],
       select {
-        min-height: 48px;
-        padding: 10px 8px;
+        min-height: 44px;
+        padding: 9px 8px;
       }
 
       textarea {
-        min-height: 132px;
+        min-height: 160px;
         padding: 12px 8px;
         resize: vertical;
       }
 
       input[type="text"]::placeholder,
       textarea::placeholder {
-        color: rgba(86, 66, 62, 0.65);
+        color: rgba(28, 27, 27, 0.85);
       }
 
       input[type="text"]:focus,
+      input[type="number"]:focus,
       select:focus,
       textarea:focus {
         border-bottom-color: var(--secondary);
@@ -347,6 +241,21 @@
         background: rgba(171, 143, 254, 0.08);
         padding-left: 12px;
         padding-right: 12px;
+      }
+
+      input[readonly] {
+        color: var(--on-surface);
+      }
+
+      input[type="number"] {
+        appearance: textfield;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        margin: 0;
       }
 
       select {
@@ -366,56 +275,16 @@
         display: none !important;
       }
 
-      .subsection {
-        margin-top: 32px;
-        padding-top: 32px;
-        border-top: 1px solid var(--outline-variant);
-      }
-
-      .subsection-head {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 24px;
-        align-items: start;
-      }
-
-      .subsection h3,
-      .chart-title {
-        color: var(--on-surface);
-        font-size: 24px;
-        font-weight: 600;
-        line-height: 1.3;
-      }
-
-      .subsection-copy {
-        max-width: 760px;
-        margin-top: 8px;
-      }
-
-      .microcopy {
-        color: var(--tertiary);
-        font-size: 12px;
-        font-weight: 500;
-      }
-
-      .chart-shell {
-        display: grid;
-        grid-template-columns: minmax(320px, 5fr) minmax(0, 7fr);
-        gap: 32px;
-        align-items: center;
+      .chart-card {
         padding: 32px;
-      }
-
-      .chart-panel {
-        padding: 24px;
         border: 1px solid var(--outline-variant);
         border-radius: 1.5rem;
-        background: var(--background);
+        background: var(--surface-low);
       }
 
       .chart-frame {
         position: relative;
-        width: min(100%, 440px);
+        width: min(100%, 420px);
         margin: 0 auto;
         aspect-ratio: 1 / 1;
       }
@@ -425,27 +294,34 @@
         height: 100% !important;
       }
 
-      .legend {
+      .chart-center {
+        position: absolute;
+        inset: 0;
         display: grid;
-        gap: 8px;
+        place-items: center;
+        color: var(--primary);
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1;
+        pointer-events: none;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px 22px;
         margin-top: 24px;
       }
 
-      .legend-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 16px;
+      .legend-item {
+        display: inline-flex;
         align-items: center;
-        min-height: 40px;
-        padding: 8px 0;
-        border-bottom: 1px solid var(--outline-variant);
-      }
-
-      .legend-main {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        gap: 8px;
         min-width: 0;
+        color: var(--on-surface);
+        font-size: 13px;
+        line-height: 1.2;
       }
 
       .legend-swatch {
@@ -455,25 +331,10 @@
         border-radius: 9999px;
       }
 
-      .legend-name {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .legend-value {
-        color: var(--primary);
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-      }
-
       .peer-list {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 24px;
-        margin-top: 24px;
       }
 
       .peer-card {
@@ -484,13 +345,9 @@
         background: var(--background);
       }
 
-      .peer-top {
-        display: grid;
-        gap: 8px;
-      }
-
       .member-chip {
         width: fit-content;
+        margin-bottom: 10px;
         padding: 7px 10px;
         border-radius: 9999px;
         background: var(--surface-high);
@@ -498,103 +355,82 @@
         font-size: 12px;
       }
 
-      .peer-name {
-        min-height: 110px;
-        overflow-wrap: anywhere;
-        color: var(--on-surface);
-        font-size: 48px;
-        font-weight: 700;
-        line-height: 1.1;
-        letter-spacing: 0;
+      .peer-card .name-field {
+        margin-bottom: 16px;
       }
 
-      .allocation-strip {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 12px;
-        align-items: center;
-        margin-top: 16px;
-        padding: 10px;
+      .peer-card .name-field input {
+        border: 1px solid var(--outline-variant);
+        border-radius: 0;
+        background: transparent;
+        color: var(--on-surface);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .peer-card .name-field input:focus {
         border-radius: 0.5rem;
+      }
+
+      .allocation-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 64px auto;
+        gap: 8px;
+        align-items: center;
+        min-height: 42px;
+        margin-bottom: 16px;
+        padding: 8px;
+        border-radius: 0.25rem;
         background: var(--surface);
       }
 
       .chart-label {
         color: var(--outline);
         font-size: 12px;
-        font-weight: 500;
       }
 
-      .peer-percent {
+      .allocation-input {
+        min-height: 30px !important;
+        padding: 2px 4px !important;
+        border: 0 !important;
+        background: transparent !important;
+      }
+
+      .allocation-unit {
         color: var(--primary);
-        font-size: 32px;
         font-weight: 700;
-        line-height: 1;
       }
 
-      .peer-card:nth-child(2) .peer-percent,
-      .peer-card:nth-child(2) .range-value,
-      .peer-card:nth-child(2) input[type="range"]::-webkit-slider-thumb {
+      .peer-card:nth-child(1) .allocation-input,
+      .peer-card:nth-child(1) .allocation-unit {
+        color: var(--primary);
+      }
+
+      .peer-card:nth-child(2) .allocation-input,
+      .peer-card:nth-child(2) .allocation-unit {
         color: var(--secondary);
       }
 
-      .peer-card:nth-child(3) .peer-percent,
-      .peer-card:nth-child(3) .range-value {
+      .peer-card:nth-child(3) .allocation-input,
+      .peer-card:nth-child(3) .allocation-unit {
         color: var(--tertiary);
       }
 
-      .slider-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 54px;
-        gap: 12px;
-        align-items: center;
-        margin: 16px 0 8px;
+      .peer-card:nth-child(4) .allocation-input,
+      .peer-card:nth-child(4) .allocation-unit {
+        color: var(--secondary-container);
       }
 
-      input[type="range"] {
-        width: 100%;
-        appearance: none;
-        height: 4px;
-        border-radius: 9999px;
-        background: var(--surface-highest);
+      .justification-field textarea {
+        min-height: 160px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 0;
+        background: transparent;
       }
 
-      input[type="range"]::-webkit-slider-thumb {
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--background);
-        border-radius: 9999px;
-        background: var(--primary);
-        cursor: ew-resize;
-      }
-
-      input[type="range"]::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
-        border: 2px solid var(--background);
-        border-radius: 9999px;
-        background: var(--primary);
-        cursor: ew-resize;
-      }
-
-      input[type="range"]::-moz-range-track {
-        height: 4px;
-        border-radius: 9999px;
-        background: var(--surface-highest);
-      }
-
-      .range-value {
-        color: var(--primary);
-        font-size: 14px;
-        font-weight: 700;
-        text-align: right;
-      }
-
-      .helper {
-        min-height: 42px;
-        font-size: 14px;
-        line-height: 1.5;
+      .justification-field textarea:focus {
+        border-radius: 0.5rem;
       }
 
       .error {
@@ -608,7 +444,6 @@
         display: grid;
         grid-template-columns: minmax(0, 1fr);
         gap: 24px;
-        margin-top: 32px;
         padding-top: 32px;
         border-top: 1px solid var(--outline-variant);
       }
@@ -617,16 +452,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        min-height: 40px;
+        gap: 8px;
+        min-height: 28px;
         color: var(--tertiary);
       }
 
-      .total-value {
-        color: var(--tertiary);
-        font-size: 24px;
+      .total-bar.unbalanced {
+        color: var(--error);
+      }
+
+      .total-value,
+      .total-status {
         font-weight: 700;
-        line-height: 1;
       }
 
       button {
@@ -657,10 +494,12 @@
       }
 
       .footer-note {
-        max-width: 520px;
+        max-width: 560px;
         margin: 0 auto;
+        color: var(--on-surface-variant);
         text-align: center;
         font-size: 14px;
+        line-height: 1.5;
       }
 
       .confirmation {
@@ -668,6 +507,9 @@
         display: grid;
         place-items: center;
         padding: 48px 24px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.5rem;
+        background: var(--surface-low);
         text-align: center;
       }
 
@@ -698,6 +540,7 @@
 
       .confirmation p {
         margin: 16px auto 0;
+        color: var(--on-surface-variant);
         font-size: 18px;
       }
 
@@ -707,17 +550,8 @@
           padding-right: 32px;
         }
 
-        .intro,
-        .chart-shell {
-          grid-template-columns: 1fr;
-        }
-
         .peer-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .peer-name {
-          min-height: 76px;
         }
       }
 
@@ -727,7 +561,7 @@
         }
 
         .page {
-          padding: 20px 16px 48px;
+          padding: 18px 16px 40px;
         }
 
         .topbar {
@@ -738,7 +572,7 @@
           font-size: 26px;
         }
 
-        .intro {
+        .page-header {
           padding: 24px 0;
         }
 
@@ -751,31 +585,20 @@
           font-size: 16px;
         }
 
-        .stat-panel,
         .field-grid,
-        .section-head,
-        .subsection-head,
         .peer-list {
           grid-template-columns: 1fr;
         }
 
-        .form-shell,
-        .chart-shell {
+        .chart-card {
           padding: 20px;
-          border-radius: 1.5rem;
         }
 
-        .chart-panel {
-          padding: 16px;
-        }
-
-        .section-title {
+        .chart-center {
           font-size: 28px;
         }
 
-        .peer-name,
         .confirmation h2 {
-          min-height: auto;
           font-size: 36px;
         }
       }
@@ -790,136 +613,69 @@
         </div>
       </header>
 
-      <section class="intro">
-        <div>
-          <div class="eyebrow"><i class="ti ti-chart-pie"></i> Contribution Review</div>
-          <h1 class="display-title">Allocate 100% of the work. Justify every share.</h1>
-          <p class="intro-copy">
-            Reflect on your group project contribution, identify the country team, and distribute the final credit across all four members with written rationale for each allocation.
-          </p>
-        </div>
-
-        <aside class="stat-panel" aria-label="Submission requirements">
-          <div class="stat">
-            <div class="stat-value">4</div>
-            <div class="stat-label">Peer Names</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Locked Total</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">20+</div>
-            <div class="stat-label">Characters</div>
-          </div>
-        </aside>
+      <section class="page-header">
+        <h1 class="display-title">The Pie Chart Allocation</h1>
+        <p class="intro-copy">
+          Reflect on your team's contribution. Distribute 100% of the project credit across your group members based on their contributions to the group project. Make sure to give a justification for this rationale in the comment box as well.
+        </p>
       </section>
 
       <main id="appRoot" class="workspace">
-        <section class="chart-shell">
-          <div>
-            <div class="eyebrow"><i class="ti ti-activity"></i> Live Allocation</div>
-            <h2 class="section-title">The Pie Chart Allocation</h2>
-            <p class="chart-copy">
-              The chart redraws as sliders move and as names are typed. Use it as a quick balance check before submitting the final record.
-            </p>
-            <div id="chartLegend" class="legend"></div>
+        <form id="allocatorForm" class="form-flow" novalidate>
+          <div id="globalError" class="global-error hidden"></div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="submitterName">Your Name</label>
+              <input id="submitterName" name="submitterName" type="text" autocomplete="name" placeholder="Full name">
+              <div id="submitterNameError" class="error"></div>
+            </div>
+
+            <div class="field">
+              <label for="period">Class Period</label>
+              <select id="period" name="period">
+                <option value="">Select your period</option>
+                <option value="5">Period 5</option>
+                <option value="6">Period 6</option>
+              </select>
+              <div id="periodError" class="error"></div>
+            </div>
+
+            <div id="countryField" class="field hidden">
+              <label for="country">Country Group</label>
+              <select id="country" name="country">
+                <option value="">Select your country</option>
+              </select>
+              <div id="countryError" class="error"></div>
+            </div>
           </div>
 
-          <div class="chart-panel">
+          <section class="chart-card" aria-label="Live allocation chart">
             <div class="chart-frame">
               <canvas id="allocationChart" width="420" height="420"></canvas>
+              <div id="chartCenter" class="chart-center">100%</div>
             </div>
-          </div>
-        </section>
+            <div id="chartLegend" class="legend"></div>
+          </section>
 
-        <section class="form-shell">
-          <div class="section-head">
-            <div>
-              <div class="eyebrow"><i class="ti ti-clipboard-text"></i> Student Entry</div>
-              <h2 class="section-title">Submission Form</h2>
-              <p class="section-copy">
-                Start with your name, select the correct period and country group, then complete the roster, percentages, and justifications.
-              </p>
+          <section id="peerSection" class="peer-list hidden" aria-label="Peer allocation cards"></section>
+
+          <section id="actionsSection" class="actions hidden">
+            <div id="totalBar" class="total-bar">
+              <i class="ti ti-circle-check"></i>
+              <span>Total:</span>
+              <span id="totalPill" class="total-value">100%</span>
+              <span id="totalStatus" class="total-status">/ Balanced</span>
             </div>
-            <div class="section-tag"><i class="ti ti-lock-check"></i> Inline Validation</div>
-          </div>
-
-          <form id="allocatorForm" novalidate>
-            <div id="globalError" class="global-error hidden"></div>
-
-            <div class="field-grid">
-              <div class="field">
-                <label for="submitterName">Your Name</label>
-                <input id="submitterName" name="submitterName" type="text" autocomplete="name" placeholder="Full name">
-                <div id="submitterNameError" class="error"></div>
-              </div>
-
-              <div class="field">
-                <label for="period">Period</label>
-                <select id="period" name="period">
-                  <option value="">Select your period</option>
-                  <option value="5">Period 5</option>
-                  <option value="6">Period 6</option>
-                </select>
-                <div id="periodError" class="error"></div>
-              </div>
-
-              <div id="countryField" class="field hidden">
-                <label for="country">Country</label>
-                <select id="country" name="country">
-                  <option value="">Select your country</option>
-                </select>
-                <div id="countryError" class="error"></div>
-              </div>
-            </div>
-
-            <div id="peerSection" class="subsection hidden">
-              <div class="subsection-head">
-                <div>
-                  <div class="microcopy">Team Configuration</div>
-                  <h3>Group Members</h3>
-                  <p class="subsection-copy">
-                    The first peer field follows your name automatically. As the roster changes, the allocation cards and chart legend update immediately.
-                  </p>
-                </div>
-                <div class="section-tag"><i class="ti ti-users-group"></i> Four Required</div>
-              </div>
-
-              <div class="field-grid" id="nameFields"></div>
-
-              <div class="subsection">
-                <div class="subsection-head">
-                  <div>
-                    <div class="microcopy">Allocation Engine</div>
-                    <h3>Contribution Split</h3>
-                    <p class="subsection-copy">
-                      Move any slider and the remaining percentages redistribute proportionally across the other group members.
-                    </p>
-                  </div>
-                  <div class="section-tag"><i class="ti ti-percentage"></i> Locked To 100</div>
-                </div>
-
-                <div class="peer-list" id="peerCards"></div>
-
-                <div class="actions">
-                  <div class="total-bar">
-                    <i class="ti ti-circle-check"></i>
-                    <span class="microcopy">Total:</span>
-                    <span id="totalPill" class="total-value">100%</span>
-                  </div>
-                  <button id="submitButton" type="submit">
-                    <i class="ti ti-send"></i>
-                    Submit Evaluation
-                  </button>
-                  <p class="footer-note">
-                    By submitting, you confirm these percentages accurately reflect the collaborative effort of your group.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </form>
-        </section>
+            <button id="submitButton" type="submit">
+              <i class="ti ti-send"></i>
+              Submit Evaluation
+            </button>
+            <p class="footer-note">
+              By submitting, you confirm these percentages accurately reflect the collaborative effort of your group.
+            </p>
+          </section>
+        </form>
       </main>
     </div>
 
@@ -929,7 +685,7 @@
         '6': ['Afghanistan', 'Cambodia', 'China', 'El Salvador', 'Philippines', 'Rwanda', 'Vietnam']
       };
 
-      const CHART_COLORS = ['#9f402d', '#674bb5', '#296956', '#e5e2e1'];
+      const CHART_COLORS = ['#9f402d', '#674bb5', '#296956', '#ab8ffe'];
       const DEFAULT_ALLOCATIONS = [25, 25, 25, 25];
 
       const state = {
@@ -945,14 +701,15 @@
       const countryField = document.getElementById('countryField');
       const countrySelect = document.getElementById('country');
       const peerSection = document.getElementById('peerSection');
-      const nameFields = document.getElementById('nameFields');
-      const peerCards = document.getElementById('peerCards');
+      const actionsSection = document.getElementById('actionsSection');
+      const totalBar = document.getElementById('totalBar');
       const totalPill = document.getElementById('totalPill');
+      const totalStatus = document.getElementById('totalStatus');
       const submitButton = document.getElementById('submitButton');
       const globalError = document.getElementById('globalError');
       const chartLegend = document.getElementById('chartLegend');
+      const chartCenter = document.getElementById('chartCenter');
 
-      buildNameFields();
       buildPeerCards();
       initializeChart();
       updateCountryOptions();
@@ -964,58 +721,54 @@
       countrySelect.addEventListener('change', onCountryChange);
       form.addEventListener('submit', handleSubmit);
 
-      function buildNameFields() {
-        const labels = ['Student 1', 'Student 2', 'Student 3', 'Student 4'];
-        const placeholders = ['Your name', 'Group member name', 'Group member name', 'Group member name'];
-
-        for (let i = 0; i < 4; i += 1) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'field';
-          wrapper.innerHTML =
-            '<label for="peerName' + i + '">' + labels[i] + '</label>' +
-            '<input id="peerName' + i + '" data-peer-index="' + i + '" type="text" placeholder="' + placeholders[i] + '">' +
-            '<div id="peerName' + i + 'Error" class="error"></div>';
-          nameFields.appendChild(wrapper);
-        }
-
-        getNameInputs().forEach(function(input) {
-          input.addEventListener('input', updateLabelsAndChart);
-        });
-      }
-
       function buildPeerCards() {
+        const placeholders = ['Full name', 'Group member name', 'Group member name', 'Group member name'];
+
         for (let i = 0; i < 4; i += 1) {
           const card = document.createElement('div');
           card.className = 'peer-card';
           card.innerHTML =
-            '<div class="peer-top">' +
-              '<div class="member-chip">Member ' + (i + 1) + '</div>' +
-              '<div id="peerLabel' + i + '" class="peer-name">Student ' + (i + 1) + '</div>' +
+            '<div class="member-chip">Member ' + (i + 1) + '</div>' +
+            '<div class="name-field">' +
+              '<input id="peerName' + i + '" data-peer-index="' + i + '" type="text" placeholder="' + placeholders[i] + '">' +
+              '<div id="peerName' + i + 'Error" class="error"></div>' +
             '</div>' +
-            '<div class="allocation-strip">' +
+            '<div class="allocation-row">' +
               '<div class="chart-label">Allocation</div>' +
-              '<div id="peerPercent' + i + '" class="peer-percent">25%</div>' +
+              '<input id="peerAllocation' + i + '" class="allocation-input" data-peer-index="' + i + '" type="number" min="0" max="100" step="1" value="' + DEFAULT_ALLOCATIONS[i] + '" aria-label="Member ' + (i + 1) + ' allocation percentage">' +
+              '<div class="allocation-unit">%</div>' +
             '</div>' +
-            '<div class="slider-row">' +
-              '<input id="peerSlider' + i + '" data-peer-index="' + i + '" type="range" min="0" max="100" step="1" value="' + DEFAULT_ALLOCATIONS[i] + '">' +
-              '<div id="rangeValue' + i + '" class="range-value">25%</div>' +
-            '</div>' +
-            '<div class="helper">The remaining percentages shift automatically across the other group members.</div>' +
-            '<label for="peerJustification' + i + '">Justification</label>' +
-            '<textarea id="peerJustification' + i + '" data-peer-index="' + i + '" placeholder="Describe this person&apos;s contribution with specific detail."></textarea>' +
-            '<div id="peerJustification' + i + 'Error" class="error"></div>';
-          peerCards.appendChild(card);
+            '<div class="justification-field">' +
+              '<label for="peerJustification' + i + '">Justification</label>' +
+              '<textarea id="peerJustification' + i + '" data-peer-index="' + i + '" placeholder="Describe their contribution..."></textarea>' +
+              '<div id="peerJustification' + i + 'Error" class="error"></div>' +
+            '</div>';
+          peerSection.appendChild(card);
         }
 
-        getSliderInputs().forEach(function(slider) {
-          slider.addEventListener('input', handleSliderInput);
+        document.getElementById('peerName0').readOnly = true;
+
+        getNameInputs().forEach(function(input) {
+          input.addEventListener('input', updateLabelsAndChart);
+        });
+
+        getAllocationInputs().forEach(function(input) {
+          input.addEventListener('input', handleAllocationInput);
+          input.addEventListener('change', handleAllocationInput);
+          input.addEventListener('blur', handleAllocationInput);
+          input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              handleAllocationInput(event);
+            }
+          });
         });
       }
 
       function initializeChart() {
         const ctx = document.getElementById('allocationChart');
         state.chart = new Chart(ctx, {
-          type: 'pie',
+          type: 'doughnut',
           data: {
             labels: getPeerNames(),
             datasets: [{
@@ -1029,6 +782,7 @@
           options: {
             responsive: true,
             maintainAspectRatio: true,
+            cutout: '60%',
             plugins: {
               legend: { display: false },
               tooltip: {
@@ -1040,7 +794,7 @@
                 displayColors: true,
                 callbacks: {
                   label: function(context) {
-                    const label = context.label || 'Student';
+                    const label = context.label || 'Member';
                     const value = context.raw || 0;
                     return label + ': ' + value + '%';
                   }
@@ -1056,6 +810,7 @@
         updateCountryOptions();
         countryField.classList.toggle('hidden', !periodSelect.value);
         peerSection.classList.add('hidden');
+        actionsSection.classList.add('hidden');
         countrySelect.value = '';
         clearGlobalError();
         clearAllFieldErrors();
@@ -1063,7 +818,9 @@
 
       function onCountryChange() {
         clearError('country');
-        peerSection.classList.toggle('hidden', !countrySelect.value);
+        const isReady = Boolean(countrySelect.value);
+        peerSection.classList.toggle('hidden', !isReady);
+        actionsSection.classList.toggle('hidden', !isReady);
         clearGlobalError();
       }
 
@@ -1086,11 +843,11 @@
         updateLabelsAndChart();
       }
 
-      function handleSliderInput(event) {
+      function handleAllocationInput(event) {
         const changedIndex = Number(event.target.dataset.peerIndex);
         const newValue = clampInteger(Number(event.target.value), 0, 100);
         rebalanceAllocations(changedIndex, newValue);
-        updateSliderUI();
+        updateAllocationUI();
         updateLabelsAndChart();
       }
 
@@ -1148,27 +905,23 @@
         state.allocations = next;
       }
 
-      function updateSliderUI() {
-        getSliderInputs().forEach(function(slider, index) {
-          slider.value = state.allocations[index];
+      function updateAllocationUI() {
+        getAllocationInputs().forEach(function(input, index) {
+          input.value = state.allocations[index];
         });
 
-        state.allocations.forEach(function(value, index) {
-          document.getElementById('peerPercent' + index).textContent = value + '%';
-          document.getElementById('rangeValue' + index).textContent = value + '%';
-        });
-
-        totalPill.textContent = getAllocationTotal() + '%';
+        const total = getAllocationTotal();
+        const isBalanced = total === 100;
+        totalPill.textContent = total + '%';
+        totalStatus.textContent = isBalanced ? '/ Balanced' : '/ Unbalanced';
+        totalBar.classList.toggle('unbalanced', !isBalanced);
+        totalBar.querySelector('i').className = isBalanced ? 'ti ti-circle-check' : 'ti ti-alert-circle';
+        chartCenter.textContent = total + '%';
       }
 
       function updateLabelsAndChart() {
         const names = getPeerNames();
-
-        names.forEach(function(name, index) {
-          document.getElementById('peerLabel' + index).textContent = name;
-        });
-
-        updateSliderUI();
+        updateAllocationUI();
         updateChart(names);
       }
 
@@ -1179,15 +932,12 @@
 
         chartLegend.innerHTML = '';
         names.forEach(function(name, index) {
-          const row = document.createElement('div');
-          row.className = 'legend-row';
-          row.innerHTML =
-            '<div class="legend-main">' +
-              '<span class="legend-swatch" style="background:' + CHART_COLORS[index] + ';"></span>' +
-              '<span class="legend-name">' + escapeHtml(name) + '</span>' +
-            '</div>' +
-            '<div class="legend-value">' + state.allocations[index] + '%</div>';
-          chartLegend.appendChild(row);
+          const item = document.createElement('div');
+          item.className = 'legend-item';
+          item.innerHTML =
+            '<span class="legend-swatch" style="background:' + CHART_COLORS[index] + ';"></span>' +
+            '<span>' + escapeHtml(name) + ' - ' + state.allocations[index] + '%</span>';
+          chartLegend.appendChild(item);
         });
       }
 
@@ -1337,14 +1087,14 @@
         return Array.from(document.querySelectorAll('input[type="text"][data-peer-index]'));
       }
 
-      function getSliderInputs() {
-        return Array.from(document.querySelectorAll('input[type="range"][data-peer-index]'));
+      function getAllocationInputs() {
+        return Array.from(document.querySelectorAll('input[type="number"][data-peer-index]'));
       }
 
       function getPeerNames() {
         return [0, 1, 2, 3].map(function(index) {
           const value = document.getElementById('peerName' + index).value.trim();
-          return value || 'Student ' + (index + 1);
+          return value || 'Member ' + String.fromCharCode(65 + index);
         });
       }
 
