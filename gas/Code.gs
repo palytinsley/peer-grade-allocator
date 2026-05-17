@@ -23,9 +23,8 @@ function doPost(e) {
 }
 
 function doOptions(e) {
-  return jsonOutput({}, {
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+  return jsonOutput({
+    success: true
   });
 }
 
@@ -111,18 +110,8 @@ function normalizeHeader(header) {
   return String(header || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function jsonOutput(data, extraHeaders) {
-  var output = ContentService
+function jsonOutput(data) {
+  return ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
-
-  output.setHeader('Access-Control-Allow-Origin', '*');
-
-  if (extraHeaders) {
-    Object.keys(extraHeaders).forEach(function(header) {
-      output.setHeader(header, extraHeaders[header]);
-    });
-  }
-
-  return output;
 }
