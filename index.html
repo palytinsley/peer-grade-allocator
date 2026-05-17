@@ -4,7 +4,7 @@
     <base target="_top">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Peer Grade Allocator</title>
+    <title>Junk Kouture Peer Grader</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -607,7 +607,7 @@
   <body>
     <div class="page">
       <header class="topbar">
-        <div class="brand">Peer Grade Allocator</div>
+        <div class="brand">Junk Kouture Peer Grader</div>
         <div class="topbar-badge" aria-label="Peer review form">
           <i class="ti ti-user-circle"></i>
         </div>
@@ -626,7 +626,7 @@
 
           <div class="field-grid">
             <div class="field">
-              <label for="submitterName">Your Name</label>
+              <label for="submitterName">Your Full Name</label>
               <input id="submitterName" name="submitterName" type="text" autocomplete="name" placeholder="Full name">
               <div id="submitterNameError" class="error"></div>
             </div>
@@ -1002,7 +1002,7 @@
         const errors = {};
 
         if (!payload.submitterName) {
-          errors.submitterName = 'Enter your name.';
+          errors.submitterName = 'Enter your first and last name.';
         }
 
         if (!payload.period) {
