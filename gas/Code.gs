@@ -2,9 +2,11 @@ const SPREADSHEET_ID = '1_xOjYXh_PQzXERVyp-k_lyge9jAxiWTPAedS6lOdl0c';
 const SHEET_NAME = 'Responses';
 
 function doGet(e) {
-  return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, app: 'Peer Grade Allocator' }))
-    .setMimeType(ContentService.MimeType.JSON);
+  return jsonOutput({
+    success: true,
+    app: 'Peer Grade Allocator',
+    message: 'GAS Web App endpoint is live.'
+  });
 }
 
 function doPost(e) {
@@ -20,6 +22,14 @@ function doPost(e) {
   }
 }
 
+function doOptions(e) {
+  return jsonOutput({}, {
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
+}
+
+// Deploy the Web App with "Anyone" access so GitHub Pages can submit without Google login.
 function submitData(payload) {
   validatePayload(payload);
 
@@ -101,8 +111,18 @@ function normalizeHeader(header) {
   return String(header || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-function jsonOutput(data) {
-  return ContentService
+function jsonOutput(data, extraHeaders) {
+  var output = ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+
+  output.setHeader('Access-Control-Allow-Origin', '*');
+
+  if (extraHeaders) {
+    Object.keys(extraHeaders).forEach(function(header) {
+      output.setHeader(header, extraHeaders[header]);
+    });
+  }
+
+  return output;
 }

@@ -961,8 +961,14 @@
         submitButton.disabled = true;
         submitButton.innerHTML = '<i class="ti ti-loader-2"></i> Submitting...';
 
-        google.script.run
-          .withSuccessHandler(function(response) {
+        fetch('https://script.google.com/macros/s/AKfycbwHTTXnIZhC2ppH_qBitWnR2I5MWWitmYDng--4jEaFDpAkJsGyYT4I-bNh6zlHZl9Pnw/exec', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        })
+          .then(function(result) {
+            return result.json();
+          })
+          .then(function(response) {
             state.submitting = false;
             submitButton.disabled = false;
             submitButton.innerHTML = '<i class="ti ti-send"></i> Submit Evaluation';
@@ -974,13 +980,12 @@
 
             renderConfirmation();
           })
-          .withFailureHandler(function(error) {
+          .catch(function(error) {
             state.submitting = false;
             submitButton.disabled = false;
             submitButton.innerHTML = '<i class="ti ti-send"></i> Submit Evaluation';
             showGlobalError(error && error.message ? error.message : 'Unable to submit response.');
-          })
-          .submitData(payload);
+          });
       }
 
       function buildPayload() {
