@@ -175,7 +175,6 @@
       }
 
       .lookup-kicker,
-      .submission-meta,
       .submission-note,
       .counter-text {
         font-size: 13px;
@@ -241,38 +240,47 @@
         line-height: 1.5;
       }
 
-      .submissions-list {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      .submission-card {
-        min-width: 0;
-        padding: 16px;
+      .submissions-table-wrap {
+        overflow-x: auto;
         border: 1px solid var(--outline-variant);
         border-radius: 1rem;
-        background: rgba(252, 249, 248, 0.88);
+        background: var(--surface);
       }
 
-      .submission-name {
-        color: var(--primary);
-        font-family: "Playfair Display", Georgia, serif;
-        font-size: 25px;
-        font-weight: 700;
-        line-height: 1.12;
+      .submissions-table {
+        width: 100%;
+        min-width: 560px;
+        border-collapse: collapse;
+        font-size: 16px;
       }
 
-      .submission-meta {
-        margin-top: 10px;
-        color: var(--on-surface);
+      .submissions-table th,
+      .submissions-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--outline-variant);
+      }
+
+      .submissions-table th {
+        background: var(--surface-low);
+        color: var(--outline);
+        font-family: "Hanken Grotesk", Arial, sans-serif;
+        font-size: 14px;
         font-weight: 600;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
       }
 
-      .submission-time {
-        margin-top: 8px;
-        color: var(--on-surface-variant);
+      .submissions-table tbody tr:nth-child(odd) {
+        background: var(--surface-low);
+      }
+
+      .submissions-table tbody tr:nth-child(even) {
+        background: var(--surface);
+      }
+
+      .submissions-table tbody tr:last-child td {
+        border-bottom: 0;
       }
 
       .submission-status {
@@ -742,7 +750,7 @@
 
         .lookup-shell,
         .chart-card,
-        .submission-card,
+        .submissions-table-wrap,
         .confirmation {
           border-radius: 1rem;
         }
@@ -1398,22 +1406,30 @@
           return;
         }
 
-        submissionsContent.className = 'submissions-list';
-        submissionsContent.innerHTML = state.submissions.map(function(entry) {
-          return (
-            '<article class="submission-card">' +
-              '<h3 class="submission-name">' + escapeHtml(entry.submitterName || 'Unnamed Student') + '</h3>' +
-              '<div class="submission-meta">' + escapeHtml(formatSubmissionMeta(entry.period, entry.country)) + '</div>' +
-              '<div class="submission-time">Submitted: ' + escapeHtml(formatTimestamp(entry.timestamp)) + '</div>' +
-            '</article>'
-          );
-        }).join('');
-      }
-
-      function formatSubmissionMeta(period, country) {
-        const periodLabel = period ? 'Period ' + String(period) : 'Period not listed';
-        const countryLabel = country || 'Country not listed';
-        return periodLabel + ' • ' + countryLabel;
+        submissionsContent.className = 'submissions-table-wrap';
+        submissionsContent.innerHTML =
+          '<table class="submissions-table">' +
+            '<thead>' +
+              '<tr>' +
+                '<th scope="col">Name</th>' +
+                '<th scope="col">Period</th>' +
+                '<th scope="col">Country</th>' +
+                '<th scope="col">Submitted</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              state.submissions.map(function(entry) {
+                return (
+                  '<tr>' +
+                    '<td>' + escapeHtml(entry.submitterName || 'Unnamed Student') + '</td>' +
+                    '<td>' + escapeHtml(entry.period ? 'Period ' + String(entry.period) : 'Period not listed') + '</td>' +
+                    '<td>' + escapeHtml(entry.country || 'Country not listed') + '</td>' +
+                    '<td>' + escapeHtml(formatTimestamp(entry.timestamp)) + '</td>' +
+                  '</tr>'
+                );
+              }).join('') +
+            '</tbody>' +
+          '</table>';
       }
 
       function formatTimestamp(timestamp) {
