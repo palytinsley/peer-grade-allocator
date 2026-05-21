@@ -1333,33 +1333,22 @@
         state.submissionsError = '';
         renderSubmissionsState();
 
-        fetch(GAS_EXEC_URL + '?action=submissions', {
-          method: 'GET'
-        })
-          .then(function(response) {
-            if (!response.ok) {
-              throw new Error('Unable to load submissions right now.');
-            }
-            return response.json();
-          })
-          .then(function(data) {
-            if (!data || !data.success || !Array.isArray(data.submissions)) {
-              throw new Error('Submission list was not returned.');
-            }
-
-            state.submissions = data.submissions;
+        google.script.run
+          .withSuccessHandler(function(submissions) {
+            state.submissions = submissions;
             state.submissionsLoaded = true;
             state.submissionsError = '';
+            state.loadingSubmissions = false;
+            renderSubmissionsState();
           })
-          .catch(function(error) {
+          .withFailureHandler(function(error) {
             state.submissions = [];
             state.submissionsLoaded = false;
             state.submissionsError = error && error.message ? error.message : 'Unable to load submissions right now.';
-          })
-          .finally(function() {
             state.loadingSubmissions = false;
             renderSubmissionsState();
-          });
+          })
+          .getSubmissionSummaries();
       }
 
       function renderSubmissionsState() {
