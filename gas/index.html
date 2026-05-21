@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Junk Kouture Peer Grader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+      :root {
+        --background: #fcf9f8;
+        --surface: #f0eded;
+        --surface-low: #f6f3f2;
+        --surface-high: #eae7e7;
+        --surface-highest: #e5e2e1;
+        --on-surface: #1c1b1b;
+        --on-surface-variant: #56423e;
+        --outline: #89726d;
+        --outline-variant: #ddc0ba;
+        --primary: #9f402d;
+        --on-primary: #ffffff;
+        --primary-container: #e2725b;
+        --on-primary-container: #5a0d02;
+        --secondary: #674bb5;
+        --on-secondary: #ffffff;
+        --secondary-container: #ab8ffe;
+        --on-secondary-container: #3f1e8c;
+        --tertiary: #296956;
+        --on-tertiary: #ffffff;
+        --tertiary-container: #619f8a;
+        --error: #ba1a1a;
+        --error-container: #ffdad6;
+        --on-error-container: #93000a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--background);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--on-surface);
+        background:
+          linear-gradient(90deg, rgba(137, 114, 109, 0.08) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(137, 114, 109, 0.06) 1px, transparent 1px),
+          var(--background);
+        background-size: 64px 64px;
+        font-family: "Hanken Grotesk", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      a,
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        color: inherit;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1,
+      .brand,
+      .chart-center,
+      .confirmation h2 {
+        font-family: "Playfair Display", Georgia, serif;
+      }
+
+      .page {
+        width: min(100%, 1280px);
+        margin: 0 auto;
+        padding: 18px 64px 40px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--outline-variant);
+      }
+
+      .brand {
+        color: var(--primary);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: 0;
+      }
+
+      .topbar-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid transparent;
+        border-radius: 9999px;
+        color: var(--primary);
+        background: transparent;
+        font-size: 21px;
+      }
+
+      .page-header {
+        padding: 32px 0 26px;
+      }
+
+      .display-title {
+        color: var(--primary);
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: 0;
+      }
+
+      .intro-copy {
+        max-width: 720px;
+        margin-top: 8px;
+        color: var(--on-surface-variant);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .workspace {
+        display: block;
+      }
+
+      .form-flow {
+        display: grid;
+        gap: 32px;
+      }
+
+      .lookup-shell {
+        display: grid;
+        gap: 14px;
+        padding: 22px 24px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.25rem;
+        background:
+          linear-gradient(135deg, rgba(171, 143, 254, 0.09), rgba(97, 159, 138, 0.08)),
+          var(--surface-low);
+      }
+
+      .lookup-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .lookup-copy {
+        max-width: 720px;
+      }
+
+      .lookup-kicker,
+      .submission-meta,
+      .submission-note,
+      .counter-text {
+        font-size: 13px;
+        letter-spacing: 0.04em;
+      }
+
+      .lookup-kicker {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: var(--outline);
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .lookup-title {
+        color: var(--primary);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .lookup-description {
+        margin-top: 8px;
+        color: var(--on-surface-variant);
+      }
+
+      .lookup-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .ghost-button {
+        width: auto;
+        min-width: 0;
+        padding: 0 16px;
+        border: 1px solid var(--outline-variant);
+        background: rgba(252, 249, 248, 0.82);
+        color: var(--primary);
+      }
+
+      .ghost-button:hover:not(:disabled) {
+        background: rgba(226, 114, 91, 0.12);
+      }
+
+      .submission-panel {
+        display: grid;
+        gap: 16px;
+        padding-top: 4px;
+      }
+
+      .submission-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .submission-note {
+        color: var(--on-surface-variant);
+        line-height: 1.5;
+      }
+
+      .submissions-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .submission-card {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1rem;
+        background: rgba(252, 249, 248, 0.88);
+      }
+
+      .submission-name {
+        color: var(--primary);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.12;
+      }
+
+      .submission-meta {
+        margin-top: 10px;
+        color: var(--on-surface);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .submission-time {
+        margin-top: 8px;
+        color: var(--on-surface-variant);
+      }
+
+      .submission-status {
+        padding: 14px 16px;
+        border-radius: 0.9rem;
+        background: rgba(240, 237, 237, 0.9);
+        color: var(--on-surface-variant);
+      }
+
+      .global-error {
+        padding: 14px 16px;
+        border: 1px solid var(--error);
+        border-radius: 0.5rem;
+        background: var(--error-container);
+        color: var(--on-error-container);
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .field {
+        min-width: 0;
+      }
+
+      label,
+      .chart-label,
+      .global-error,
+      .error,
+      .member-chip,
+      .total-bar,
+      button {
+        font-family: "Hanken Grotesk", Arial, sans-serif;
+        text-transform: uppercase;
+      }
+
+      label,
+      .chart-label,
+      .global-error,
+      .error,
+      .member-chip,
+      .total-bar {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        line-height: 1;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--outline);
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select,
+      textarea {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid var(--outline-variant);
+        border-radius: 0;
+        background: transparent;
+        outline: 1px solid transparent;
+        outline-offset: -1px;
+        transition: background-color 0.18s ease, border-color 0.18s ease, outline-color 0.18s ease, padding 0.18s ease;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select {
+        min-height: 44px;
+        padding: 9px 8px;
+      }
+
+      textarea {
+        min-height: 160px;
+        padding: 12px 8px;
+        resize: vertical;
+      }
+
+      input[type="text"]::placeholder,
+      textarea::placeholder {
+        color: rgba(28, 27, 27, 0.85);
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      select:focus,
+      textarea:focus {
+        border-bottom-color: var(--secondary);
+        border-radius: 0.5rem;
+        outline-color: var(--secondary);
+        background: rgba(171, 143, 254, 0.08);
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      input[readonly] {
+        color: var(--on-surface);
+      }
+
+      input[type="number"] {
+        appearance: textfield;
+        font-weight: 700;
+        text-align: right;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        margin: 0;
+      }
+
+      select {
+        appearance: none;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--on-surface-variant) 50%),
+          linear-gradient(135deg, var(--on-surface-variant) 50%, transparent 50%);
+        background-position:
+          calc(100% - 18px) calc(50% - 2px),
+          calc(100% - 12px) calc(50% - 2px);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+        padding-right: 36px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .chart-card {
+        padding: 32px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.5rem;
+        background: var(--surface-low);
+      }
+
+      .chart-frame {
+        position: relative;
+        width: min(100%, 420px);
+        margin: 0 auto;
+        aspect-ratio: 1 / 1;
+      }
+
+      .chart-frame canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .chart-center {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: var(--primary);
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1;
+        pointer-events: none;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px 22px;
+        margin-top: 24px;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        color: var(--on-surface);
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .legend-swatch {
+        width: 12px;
+        height: 12px;
+        flex: 0 0 auto;
+        border-radius: 9999px;
+      }
+
+      .peer-list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .peer-card {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 0.5rem;
+        background: var(--background);
+      }
+
+      .member-chip {
+        width: fit-content;
+        margin-bottom: 10px;
+        padding: 7px 10px;
+        border-radius: 9999px;
+        background: var(--surface-high);
+        color: var(--outline);
+        font-size: 12px;
+      }
+
+      .peer-card .name-field {
+        margin-bottom: 16px;
+      }
+
+      .peer-card .name-field input {
+        border: 1px solid var(--outline-variant);
+        border-radius: 0;
+        background: transparent;
+        color: var(--on-surface);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .peer-card .name-field input:focus {
+        border-radius: 0.5rem;
+      }
+
+      .allocation-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 64px auto;
+        gap: 8px;
+        align-items: center;
+        min-height: 42px;
+        margin-bottom: 16px;
+        padding: 8px;
+        border-radius: 0.25rem;
+        background: var(--surface);
+      }
+
+      .chart-label {
+        color: var(--outline);
+        font-size: 12px;
+      }
+
+      .allocation-input {
+        min-height: 30px !important;
+        padding: 2px 4px !important;
+        border: 0 !important;
+        background: transparent !important;
+      }
+
+      .allocation-unit {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .peer-card:nth-child(1) .allocation-input,
+      .peer-card:nth-child(1) .allocation-unit {
+        color: var(--primary);
+      }
+
+      .peer-card:nth-child(2) .allocation-input,
+      .peer-card:nth-child(2) .allocation-unit {
+        color: var(--secondary);
+      }
+
+      .peer-card:nth-child(3) .allocation-input,
+      .peer-card:nth-child(3) .allocation-unit {
+        color: var(--tertiary);
+      }
+
+      .peer-card:nth-child(4) .allocation-input,
+      .peer-card:nth-child(4) .allocation-unit {
+        color: var(--secondary-container);
+      }
+
+      .justification-field textarea {
+        min-height: 160px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .justification-field textarea:focus {
+        border-radius: 0.5rem;
+      }
+
+      .justification-field textarea.counter-complete {
+        border-color: var(--tertiary);
+        background: rgba(97, 159, 138, 0.08);
+      }
+
+      .counter-text {
+        margin-top: 10px;
+        color: var(--outline);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .counter-text.complete {
+        color: var(--tertiary);
+      }
+
+      .error {
+        min-height: 18px;
+        margin-top: 8px;
+        color: var(--error);
+        font-size: 12px;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding-top: 32px;
+        border-top: 1px solid var(--outline-variant);
+      }
+
+      .total-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 28px;
+        color: var(--tertiary);
+      }
+
+      .total-bar.unbalanced {
+        color: var(--error);
+      }
+
+      .total-value,
+      .total-status {
+        font-weight: 700;
+      }
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 48px;
+        border: 0;
+        border-radius: 0.5rem;
+        background: var(--primary);
+        color: var(--on-primary);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: background-color 0.18s ease, opacity 0.18s ease;
+      }
+
+      button:hover:not(:disabled) {
+        background: #813120;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      .footer-note {
+        max-width: 560px;
+        margin: 0 auto;
+        color: var(--on-surface-variant);
+        text-align: center;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .confirmation {
+        min-height: 68vh;
+        display: grid;
+        place-items: center;
+        padding: 48px 24px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.5rem;
+        background: var(--surface-low);
+        text-align: center;
+      }
+
+      .confirmation-inner {
+        max-width: 680px;
+      }
+
+      .confirmation-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+        border-radius: 9999px;
+        background: var(--tertiary-container);
+        color: var(--on-tertiary);
+        font-size: 34px;
+      }
+
+      .confirmation h2 {
+        color: var(--primary);
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: 0;
+      }
+
+      .confirmation p {
+        margin: 16px auto 0;
+        color: var(--on-surface-variant);
+        font-size: 18px;
+      }
+
+      @media (max-width: 1120px) {
+        .page {
+          padding-left: 32px;
+          padding-right: 32px;
+        }
+
+        .submissions-list {
+          grid-template-columns: 1fr;
+        }
+
+        .peer-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 760px) {
+        body {
+          background-size: 48px 48px;
+        }
+
+        .page {
+          padding: 18px 16px 40px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+        }
+
+        .brand {
+          font-size: 26px;
+        }
+
+        .page-header {
+          padding: 24px 0;
+        }
+
+        .display-title {
+          font-size: 36px;
+          line-height: 1.2;
+        }
+
+        .intro-copy {
+          font-size: 16px;
+        }
+
+        .field-grid,
+        .peer-list {
+          grid-template-columns: 1fr;
+        }
+
+        .lookup-shell,
+        .chart-card,
+        .submission-card,
+        .confirmation {
+          border-radius: 1rem;
+        }
+
+        .lookup-header,
+        .submission-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .lookup-title {
+          font-size: 26px;
+        }
+
+        .ghost-button {
+          width: 100%;
+        }
+
+        .chart-card {
+          padding: 20px;
+        }
+
+        .chart-center {
+          font-size: 28px;
+        }
+
+        .confirmation h2 {
+          font-size: 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">Junk Kouture Peer Grader</div>
+        <div class="topbar-badge" aria-label="Peer review form">
+          <i class="ti ti-user-circle"></i>
+        </div>
+      </header>
+
+      <section class="page-header">
+        <h1 class="display-title">The Pie Chart Allocation</h1>
+        <p class="intro-copy">
+          Reflect on your team's contribution. Distribute 100% of the project credit across your group members based on their contributions to the group project. Make sure to give a justification for this rationale in the comment box as well.
+        </p>
+      </section>
+
+      <main id="appRoot" class="workspace">
+        <form id="allocatorForm" class="form-flow" novalidate>
+          <div id="globalError" class="global-error hidden"></div>
+
+          <section class="lookup-shell" aria-labelledby="submissionsLookupTitle">
+            <div class="lookup-header">
+              <div class="lookup-copy">
+                <div class="lookup-kicker">Submission Check</div>
+                <h2 id="submissionsLookupTitle" class="lookup-title">Need to double-check before you start?</h2>
+                <p class="lookup-description">
+                  Use the list below if you want to confirm whether your form has already been submitted.
+                </p>
+              </div>
+              <div class="lookup-actions">
+                <button id="toggleSubmissionsButton" class="ghost-button" type="button" aria-expanded="false" aria-controls="submissionsPanel">
+                  <i class="ti ti-clipboard-check"></i>
+                  Did you fill this out already?
+                </button>
+              </div>
+            </div>
+
+            <div id="submissionsPanel" class="submission-panel hidden">
+              <div class="submission-toolbar">
+                <p class="submission-note">
+                  This only shows whether a form was submitted. It does not show peer grades or comments.
+                </p>
+                <button id="refreshSubmissionsButton" class="ghost-button" type="button">
+                  <i class="ti ti-refresh"></i>
+                  Refresh List
+                </button>
+              </div>
+              <div id="submissionsContent" class="submission-status">Open the list to load recent submissions.</div>
+            </div>
+          </section>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="submitterName">Your Full Name</label>
+              <input id="submitterName" name="submitterName" type="text" autocomplete="name" placeholder="Full name">
+              <div id="submitterNameError" class="error"></div>
+            </div>
+
+            <div class="field">
+              <label for="period">Class Period</label>
+              <select id="period" name="period">
+                <option value="">Select your period</option>
+                <option value="5">Period 5</option>
+                <option value="6">Period 6</option>
+              </select>
+              <div id="periodError" class="error"></div>
+            </div>
+
+            <div id="countryField" class="field hidden">
+              <label for="country">Country Group</label>
+              <select id="country" name="country">
+                <option value="">Select your country</option>
+              </select>
+              <div id="countryError" class="error"></div>
+            </div>
+          </div>
+
+          <section class="chart-card" aria-label="Live allocation chart">
+            <div class="chart-frame">
+              <canvas id="allocationChart" width="420" height="420"></canvas>
+              <div id="chartCenter" class="chart-center">100%</div>
+            </div>
+            <div id="chartLegend" class="legend"></div>
+          </section>
+
+          <section id="peerSection" class="peer-list hidden" aria-label="Peer allocation cards"></section>
+
+          <section id="actionsSection" class="actions hidden">
+            <div id="totalBar" class="total-bar">
+              <i class="ti ti-circle-check"></i>
+              <span>Total:</span>
+              <span id="totalPill" class="total-value">100%</span>
+              <span id="totalStatus" class="total-status">/ Balanced</span>
+            </div>
+            <button id="submitButton" type="submit">
+              <i class="ti ti-send"></i>
+              Submit Evaluation
+            </button>
+            <p class="footer-note">
+              By submitting, you confirm these percentages accurately reflect the collaborative effort of your group.
+            </p>
+          </section>
+        </form>
+      </main>
+    </div>
+
+    <script>
+      const PERIOD_COUNTRIES = {
+        '5': ['Cuba', 'India', 'Indonesia', 'Kenya', 'Mexico', 'Mozambique', 'New Zealand', 'Nigeria'],
+        '6': ['Afghanistan', 'Brazil', 'Cambodia', 'China', 'El Salvador', 'Philippines', 'Rwanda', 'Vietnam']
+      };
+
+      const GAS_EXEC_URL = 'https://script.google.com/macros/s/AKfycbxRhKI7wcKb-sQ5-xBYzoH-4-Wuibtn_NKfGQb-P62Rl6sbTKpJHuW33fmo6XRop2yblA/exec';
+      const MIN_JUSTIFICATION_CHARS = 120;
+      const CHART_COLORS = ['#9f402d', '#674bb5', '#296956', '#ab8ffe'];
+      const DEFAULT_ALLOCATIONS = [25, 25, 25, 25];
+
+      const state = {
+        allocations: DEFAULT_ALLOCATIONS.slice(),
+        chart: null,
+        submitting: false,
+        submissionLookupOpen: false,
+        loadingSubmissions: false,
+        submissionsLoaded: false,
+        submissions: [],
+        submissionsError: ''
+      };
+
+      const form = document.getElementById('allocatorForm');
+      const appRoot = document.getElementById('appRoot');
+      const submitterNameInput = document.getElementById('submitterName');
+      const periodSelect = document.getElementById('period');
+      const countryField = document.getElementById('countryField');
+      const countrySelect = document.getElementById('country');
+      const peerSection = document.getElementById('peerSection');
+      const actionsSection = document.getElementById('actionsSection');
+      const totalBar = document.getElementById('totalBar');
+      const totalPill = document.getElementById('totalPill');
+      const totalStatus = document.getElementById('totalStatus');
+      const submitButton = document.getElementById('submitButton');
+      const globalError = document.getElementById('globalError');
+      const chartLegend = document.getElementById('chartLegend');
+      const chartCenter = document.getElementById('chartCenter');
+      const toggleSubmissionsButton = document.getElementById('toggleSubmissionsButton');
+      const refreshSubmissionsButton = document.getElementById('refreshSubmissionsButton');
+      const submissionsPanel = document.getElementById('submissionsPanel');
+      const submissionsContent = document.getElementById('submissionsContent');
+
+      buildPeerCards();
+      initializeChart();
+      updateCountryOptions();
+      syncOwnName();
+      updateLabelsAndChart();
+      renderSubmissionsState();
+
+      submitterNameInput.addEventListener('input', syncOwnName);
+      periodSelect.addEventListener('change', onPeriodChange);
+      countrySelect.addEventListener('change', onCountryChange);
+      form.addEventListener('submit', handleSubmit);
+      toggleSubmissionsButton.addEventListener('click', handleSubmissionsToggle);
+      refreshSubmissionsButton.addEventListener('click', function() {
+        loadSubmissions(true);
+      });
+
+      function buildPeerCards() {
+        const placeholders = ['Full name', 'Group member name', 'Group member name', 'Group member name'];
+
+        for (let i = 0; i < 4; i += 1) {
+          const card = document.createElement('div');
+          card.className = 'peer-card';
+          card.innerHTML =
+            '<div class="member-chip">Member ' + (i + 1) + '</div>' +
+            '<div class="name-field">' +
+              '<input id="peerName' + i + '" data-peer-index="' + i + '" type="text" placeholder="' + placeholders[i] + '">' +
+              '<div id="peerName' + i + 'Error" class="error"></div>' +
+            '</div>' +
+            '<div class="allocation-row">' +
+              '<div class="chart-label">Allocation</div>' +
+              '<input id="peerAllocation' + i + '" class="allocation-input" data-peer-index="' + i + '" type="number" min="0" max="100" step="1" value="' + DEFAULT_ALLOCATIONS[i] + '" aria-label="Member ' + (i + 1) + ' allocation percentage">' +
+              '<div class="allocation-unit">%</div>' +
+            '</div>' +
+            '<div class="justification-field">' +
+              '<label for="peerJustification' + i + '">Justification</label>' +
+              '<textarea id="peerJustification' + i + '" data-peer-index="' + i + '" placeholder="Describe their contribution..."></textarea>' +
+              '<div id="peerJustification' + i + 'Counter" class="counter-text">0 / ' + MIN_JUSTIFICATION_CHARS + ' characters</div>' +
+              '<div id="peerJustification' + i + 'Error" class="error"></div>' +
+            '</div>';
+          peerSection.appendChild(card);
+        }
+
+        document.getElementById('peerName0').readOnly = true;
+
+        getNameInputs().forEach(function(input) {
+          input.addEventListener('input', updateLabelsAndChart);
+        });
+
+        getAllocationInputs().forEach(function(input) {
+          input.addEventListener('input', handleAllocationInput);
+          input.addEventListener('change', handleAllocationInput);
+          input.addEventListener('blur', handleAllocationInput);
+          input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              handleAllocationInput(event);
+            }
+          });
+        });
+
+        getJustificationInputs().forEach(function(textarea) {
+          textarea.addEventListener('input', function(event) {
+            updateJustificationCounter(Number(event.target.dataset.peerIndex));
+            clearError('peerJustification' + event.target.dataset.peerIndex);
+          });
+          updateJustificationCounter(Number(textarea.dataset.peerIndex));
+        });
+      }
+
+      function initializeChart() {
+        const ctx = document.getElementById('allocationChart');
+        state.chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: getPeerNames(),
+            datasets: [{
+              data: state.allocations.slice(),
+              backgroundColor: CHART_COLORS,
+              borderColor: '#fcf9f8',
+              borderWidth: 3,
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            cutout: '60%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1c1b1b',
+                titleColor: '#fcf9f8',
+                bodyColor: '#fcf9f8',
+                borderColor: '#ddc0ba',
+                borderWidth: 1,
+                displayColors: true,
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || 'Member';
+                    const value = context.raw || 0;
+                    return label + ': ' + value + '%';
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function onPeriodChange() {
+        clearError('period');
+        updateCountryOptions();
+        countryField.classList.toggle('hidden', !periodSelect.value);
+        peerSection.classList.add('hidden');
+        actionsSection.classList.add('hidden');
+        countrySelect.value = '';
+        clearGlobalError();
+        clearAllFieldErrors();
+      }
+
+      function onCountryChange() {
+        clearError('country');
+        const isReady = Boolean(countrySelect.value);
+        peerSection.classList.toggle('hidden', !isReady);
+        actionsSection.classList.toggle('hidden', !isReady);
+        clearGlobalError();
+      }
+
+      function updateCountryOptions() {
+        const period = periodSelect.value;
+        const countries = PERIOD_COUNTRIES[period] || [];
+
+        countrySelect.innerHTML = '<option value="">Select your country</option>';
+        countries.forEach(function(country) {
+          const option = document.createElement('option');
+          option.value = country;
+          option.textContent = country;
+          countrySelect.appendChild(option);
+        });
+      }
+
+      function syncOwnName() {
+        const ownNameField = document.getElementById('peerName0');
+        ownNameField.value = submitterNameInput.value.trim();
+        updateLabelsAndChart();
+      }
+
+      function handleAllocationInput(event) {
+        const changedIndex = Number(event.target.dataset.peerIndex);
+        const newValue = clampInteger(Number(event.target.value), 0, 100);
+        rebalanceAllocations(changedIndex, newValue);
+        updateAllocationUI();
+        updateLabelsAndChart();
+      }
+
+      function rebalanceAllocations(changedIndex, newValue) {
+        const current = state.allocations.slice();
+        const otherIndexes = [0, 1, 2, 3].filter(function(index) {
+          return index !== changedIndex;
+        });
+        const remainingTarget = 100 - newValue;
+        const otherTotal = otherIndexes.reduce(function(total, index) {
+          return total + current[index];
+        }, 0);
+
+        const next = current.slice();
+        next[changedIndex] = newValue;
+
+        if (otherTotal === 0) {
+          const base = Math.floor(remainingTarget / otherIndexes.length);
+          let remainder = remainingTarget - base * otherIndexes.length;
+          otherIndexes.forEach(function(index) {
+            next[index] = base + (remainder > 0 ? 1 : 0);
+            if (remainder > 0) {
+              remainder -= 1;
+            }
+          });
+        } else {
+          const weighted = otherIndexes.map(function(index) {
+            const raw = current[index] / otherTotal * remainingTarget;
+            return {
+              index: index,
+              floor: Math.floor(raw),
+              fraction: raw - Math.floor(raw)
+            };
+          });
+
+          weighted.forEach(function(entry) {
+            next[entry.index] = entry.floor;
+          });
+
+          let assigned = weighted.reduce(function(total, entry) {
+            return total + entry.floor;
+          }, 0);
+
+          let remainder = remainingTarget - assigned;
+          weighted.sort(function(a, b) {
+            return b.fraction - a.fraction;
+          });
+
+          for (let i = 0; i < weighted.length && remainder > 0; i += 1) {
+            next[weighted[i].index] += 1;
+            remainder -= 1;
+          }
+        }
+
+        state.allocations = next;
+      }
+
+      function updateAllocationUI() {
+        getAllocationInputs().forEach(function(input, index) {
+          input.value = state.allocations[index];
+        });
+
+        const total = getAllocationTotal();
+        const isBalanced = total === 100;
+        totalPill.textContent = total + '%';
+        totalStatus.textContent = isBalanced ? '/ Balanced' : '/ Unbalanced';
+        totalBar.classList.toggle('unbalanced', !isBalanced);
+        totalBar.querySelector('i').className = isBalanced ? 'ti ti-circle-check' : 'ti ti-alert-circle';
+        chartCenter.textContent = total + '%';
+      }
+
+      function updateLabelsAndChart() {
+        const names = getPeerNames();
+        updateAllocationUI();
+        updateChart(names);
+      }
+
+      function updateChart(names) {
+        state.chart.data.labels = names;
+        state.chart.data.datasets[0].data = state.allocations.slice();
+        state.chart.update();
+
+        chartLegend.innerHTML = '';
+        names.forEach(function(name, index) {
+          const item = document.createElement('div');
+          item.className = 'legend-item';
+          item.innerHTML =
+            '<span class="legend-swatch" style="background:' + CHART_COLORS[index] + ';"></span>' +
+            '<span>' + escapeHtml(name) + ' - ' + state.allocations[index] + '%</span>';
+          chartLegend.appendChild(item);
+        });
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        if (state.submitting) {
+          return;
+        }
+
+        clearGlobalError();
+        clearAllFieldErrors();
+
+        const payload = buildPayload();
+        const validation = validateForm(payload);
+        if (!validation.valid) {
+          showValidationErrors(validation.errors);
+          return;
+        }
+
+        state.submitting = true;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="ti ti-loader-2"></i> Submitting...';
+
+        fetch(GAS_EXEC_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify(payload)
+        })
+          .then(function() {
+            state.submitting = false;
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="ti ti-send"></i> Submit Evaluation';
+
+            renderConfirmation();
+          })
+          .catch(function(error) {
+            state.submitting = false;
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="ti ti-send"></i> Submit Evaluation';
+            showGlobalError(error && error.message ? error.message : 'Unable to submit response.');
+          });
+      }
+
+      function buildPayload() {
+        return {
+          submitterName: submitterNameInput.value.trim(),
+          period: periodSelect.value,
+          country: countrySelect.value,
+          peers: [0, 1, 2, 3].map(function(index) {
+            return {
+              name: document.getElementById('peerName' + index).value.trim(),
+              percent: state.allocations[index],
+              justification: document.getElementById('peerJustification' + index).value.trim()
+            };
+          })
+        };
+      }
+
+      function validateForm(payload) {
+        const errors = {};
+
+        if (!payload.submitterName) {
+          errors.submitterName = 'Enter your first and last name.';
+        }
+
+        if (!payload.period) {
+          errors.period = 'Select your period.';
+        }
+
+        if (!payload.country) {
+          errors.country = 'Select your country.';
+        }
+
+        payload.peers.forEach(function(peer, index) {
+          if (!peer.name) {
+            errors['peerName' + index] = 'Enter a name for this group member.';
+          }
+
+          if (!peer.justification) {
+            errors['peerJustification' + index] = 'Enter a justification.';
+          } else if (peer.justification.length < MIN_JUSTIFICATION_CHARS) {
+            errors['peerJustification' + index] = 'Use at least ' + MIN_JUSTIFICATION_CHARS + ' characters.';
+          }
+        });
+
+        if (getAllocationTotal() !== 100) {
+          errors.global = 'Percentages must total exactly 100%.';
+        }
+
+        return {
+          valid: Object.keys(errors).length === 0,
+          errors: errors
+        };
+      }
+
+      function showValidationErrors(errors) {
+        Object.keys(errors).forEach(function(key) {
+          if (key === 'global') {
+            showGlobalError(errors[key]);
+            return;
+          }
+
+          const target = document.getElementById(key + 'Error');
+          if (target) {
+            target.textContent = errors[key];
+          }
+        });
+      }
+
+      function clearAllFieldErrors() {
+        document.querySelectorAll('.error').forEach(function(node) {
+          node.textContent = '';
+        });
+      }
+
+      function clearError(fieldName) {
+        const target = document.getElementById(fieldName + 'Error');
+        if (target) {
+          target.textContent = '';
+        }
+      }
+
+      function showGlobalError(message) {
+        globalError.textContent = message;
+        globalError.classList.remove('hidden');
+      }
+
+      function clearGlobalError() {
+        globalError.textContent = '';
+        globalError.classList.add('hidden');
+      }
+
+      function renderConfirmation() {
+        appRoot.innerHTML =
+          '<section class="confirmation">' +
+            '<div class="confirmation-inner">' +
+              '<div class="confirmation-mark"><i class="ti ti-check"></i></div>' +
+              '<h2>Submitted. You&apos;re done.</h2>' +
+              '<p>Your peer grade allocation has been recorded successfully.</p>' +
+            '</div>' +
+          '</section>';
+      }
+
+      function handleSubmissionsToggle() {
+        state.submissionLookupOpen = !state.submissionLookupOpen;
+        submissionsPanel.classList.toggle('hidden', !state.submissionLookupOpen);
+        toggleSubmissionsButton.setAttribute('aria-expanded', String(state.submissionLookupOpen));
+        if (state.submissionLookupOpen && !state.submissionsLoaded && !state.loadingSubmissions) {
+          loadSubmissions(false);
+          return;
+        }
+        renderSubmissionsState();
+      }
+
+      function loadSubmissions(forceRefresh) {
+        if (state.loadingSubmissions) {
+          return;
+        }
+
+        if (state.submissionsLoaded && !forceRefresh) {
+          renderSubmissionsState();
+          return;
+        }
+
+        state.loadingSubmissions = true;
+        state.submissionsError = '';
+        renderSubmissionsState();
+
+        fetch(GAS_EXEC_URL + '?action=submissions', {
+          method: 'GET'
+        })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Unable to load submissions right now.');
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            if (!data || !data.success || !Array.isArray(data.submissions)) {
+              throw new Error('Submission list was not returned.');
+            }
+
+            state.submissions = data.submissions;
+            state.submissionsLoaded = true;
+            state.submissionsError = '';
+          })
+          .catch(function(error) {
+            state.submissions = [];
+            state.submissionsLoaded = false;
+            state.submissionsError = error && error.message ? error.message : 'Unable to load submissions right now.';
+          })
+          .finally(function() {
+            state.loadingSubmissions = false;
+            renderSubmissionsState();
+          });
+      }
+
+      function renderSubmissionsState() {
+        refreshSubmissionsButton.disabled = state.loadingSubmissions;
+        refreshSubmissionsButton.innerHTML = state.loadingSubmissions
+          ? '<i class="ti ti-loader-2"></i> Refreshing...'
+          : '<i class="ti ti-refresh"></i> Refresh List';
+
+        if (!state.submissionLookupOpen) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = 'Open the list to load recent submissions.';
+          return;
+        }
+
+        if (state.loadingSubmissions) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.innerHTML = '<i class="ti ti-loader-2"></i> Loading recent submissions...';
+          return;
+        }
+
+        if (state.submissionsError) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = state.submissionsError;
+          return;
+        }
+
+        if (!state.submissions.length) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = 'No submissions have been recorded yet.';
+          return;
+        }
+
+        submissionsContent.className = 'submissions-list';
+        submissionsContent.innerHTML = state.submissions.map(function(entry) {
+          return (
+            '<article class="submission-card">' +
+              '<h3 class="submission-name">' + escapeHtml(entry.submitterName || 'Unnamed Student') + '</h3>' +
+              '<div class="submission-meta">' + escapeHtml(formatSubmissionMeta(entry.period, entry.country)) + '</div>' +
+              '<div class="submission-time">Submitted: ' + escapeHtml(formatTimestamp(entry.timestamp)) + '</div>' +
+            '</article>'
+          );
+        }).join('');
+      }
+
+      function formatSubmissionMeta(period, country) {
+        const periodLabel = period ? 'Period ' + String(period) : 'Period not listed';
+        const countryLabel = country || 'Country not listed';
+        return periodLabel + ' • ' + countryLabel;
+      }
+
+      function formatTimestamp(timestamp) {
+        if (!timestamp) {
+          return 'Time unavailable';
+        }
+
+        const parsed = new Date(timestamp);
+        if (Number.isNaN(parsed.getTime())) {
+          return String(timestamp);
+        }
+
+        return new Intl.DateTimeFormat(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        }).format(parsed);
+      }
+
+      function updateJustificationCounter(index) {
+        const textarea = document.getElementById('peerJustification' + index);
+        const counter = document.getElementById('peerJustification' + index + 'Counter');
+        if (!textarea || !counter) {
+          return;
+        }
+
+        const count = textarea.value.trim().length;
+        counter.textContent = count + ' / ' + MIN_JUSTIFICATION_CHARS + ' characters';
+        counter.classList.toggle('complete', count >= MIN_JUSTIFICATION_CHARS);
+        textarea.classList.toggle('counter-complete', count >= MIN_JUSTIFICATION_CHARS);
+      }
+
+      function getNameInputs() {
+        return Array.from(document.querySelectorAll('input[type="text"][data-peer-index]'));
+      }
+
+      function getJustificationInputs() {
+        return Array.from(document.querySelectorAll('textarea[data-peer-index]'));
+      }
+
+      function getAllocationInputs() {
+        return Array.from(document.querySelectorAll('input[type="number"][data-peer-index]'));
+      }
+
+      function getPeerNames() {
+        return [0, 1, 2, 3].map(function(index) {
+          const value = document.getElementById('peerName' + index).value.trim();
+          return value || 'Member ' + String.fromCharCode(65 + index);
+        });
+      }
+
+      function getAllocationTotal() {
+        return state.allocations.reduce(function(total, value) {
+          return total + value;
+        }, 0);
+      }
+
+      function clampInteger(value, min, max) {
+        if (!Number.isFinite(value)) {
+          return min;
+        }
+        return Math.max(min, Math.min(max, Math.round(value)));
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+    </script>
+  </body>
+</html>
