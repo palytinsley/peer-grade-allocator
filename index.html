@@ -152,6 +152,136 @@
         gap: 32px;
       }
 
+      .lookup-shell {
+        display: grid;
+        gap: 14px;
+        padding: 22px 24px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.25rem;
+        background:
+          linear-gradient(135deg, rgba(171, 143, 254, 0.09), rgba(97, 159, 138, 0.08)),
+          var(--surface-low);
+      }
+
+      .lookup-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .lookup-copy {
+        max-width: 720px;
+      }
+
+      .lookup-kicker,
+      .submission-meta,
+      .submission-note,
+      .counter-text {
+        font-size: 13px;
+        letter-spacing: 0.04em;
+      }
+
+      .lookup-kicker {
+        display: inline-block;
+        margin-bottom: 8px;
+        color: var(--outline);
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .lookup-title {
+        color: var(--primary);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .lookup-description {
+        margin-top: 8px;
+        color: var(--on-surface-variant);
+      }
+
+      .lookup-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .ghost-button {
+        width: auto;
+        min-width: 0;
+        padding: 0 16px;
+        border: 1px solid var(--outline-variant);
+        background: rgba(252, 249, 248, 0.82);
+        color: var(--primary);
+      }
+
+      .ghost-button:hover:not(:disabled) {
+        background: rgba(226, 114, 91, 0.12);
+      }
+
+      .submission-panel {
+        display: grid;
+        gap: 16px;
+        padding-top: 4px;
+      }
+
+      .submission-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .submission-note {
+        color: var(--on-surface-variant);
+        line-height: 1.5;
+      }
+
+      .submissions-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .submission-card {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1rem;
+        background: rgba(252, 249, 248, 0.88);
+      }
+
+      .submission-name {
+        color: var(--primary);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.12;
+      }
+
+      .submission-meta {
+        margin-top: 10px;
+        color: var(--on-surface);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .submission-time {
+        margin-top: 8px;
+        color: var(--on-surface-variant);
+      }
+
+      .submission-status {
+        padding: 14px 16px;
+        border-radius: 0.9rem;
+        background: rgba(240, 237, 237, 0.9);
+        color: var(--on-surface-variant);
+      }
+
       .global-error {
         padding: 14px 16px;
         border: 1px solid var(--error);
@@ -433,6 +563,22 @@
         border-radius: 0.5rem;
       }
 
+      .justification-field textarea.counter-complete {
+        border-color: var(--tertiary);
+        background: rgba(97, 159, 138, 0.08);
+      }
+
+      .counter-text {
+        margin-top: 10px;
+        color: var(--outline);
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .counter-text.complete {
+        color: var(--tertiary);
+      }
+
       .error {
         min-height: 18px;
         margin-top: 8px;
@@ -550,6 +696,10 @@
           padding-right: 32px;
         }
 
+        .submissions-list {
+          grid-template-columns: 1fr;
+        }
+
         .peer-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -590,6 +740,27 @@
           grid-template-columns: 1fr;
         }
 
+        .lookup-shell,
+        .chart-card,
+        .submission-card,
+        .confirmation {
+          border-radius: 1rem;
+        }
+
+        .lookup-header,
+        .submission-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .lookup-title {
+          font-size: 26px;
+        }
+
+        .ghost-button {
+          width: 100%;
+        }
+
         .chart-card {
           padding: 20px;
         }
@@ -623,6 +794,37 @@
       <main id="appRoot" class="workspace">
         <form id="allocatorForm" class="form-flow" novalidate>
           <div id="globalError" class="global-error hidden"></div>
+
+          <section class="lookup-shell" aria-labelledby="submissionsLookupTitle">
+            <div class="lookup-header">
+              <div class="lookup-copy">
+                <div class="lookup-kicker">Submission Check</div>
+                <h2 id="submissionsLookupTitle" class="lookup-title">Need to double-check before you start?</h2>
+                <p class="lookup-description">
+                  Use the list below if you want to confirm whether your form has already been submitted.
+                </p>
+              </div>
+              <div class="lookup-actions">
+                <button id="toggleSubmissionsButton" class="ghost-button" type="button" aria-expanded="false" aria-controls="submissionsPanel">
+                  <i class="ti ti-clipboard-check"></i>
+                  Did you fill this out already?
+                </button>
+              </div>
+            </div>
+
+            <div id="submissionsPanel" class="submission-panel hidden">
+              <div class="submission-toolbar">
+                <p class="submission-note">
+                  This only shows whether a form was submitted. It does not show peer grades or comments.
+                </p>
+                <button id="refreshSubmissionsButton" class="ghost-button" type="button">
+                  <i class="ti ti-refresh"></i>
+                  Refresh List
+                </button>
+              </div>
+              <div id="submissionsContent" class="submission-status">Open the list to load recent submissions.</div>
+            </div>
+          </section>
 
           <div class="field-grid">
             <div class="field">
@@ -685,13 +887,20 @@
         '6': ['Afghanistan', 'Brazil', 'Cambodia', 'China', 'El Salvador', 'Philippines', 'Rwanda', 'Vietnam']
       };
 
+      const GAS_EXEC_URL = 'https://script.google.com/macros/s/AKfycbxRhKI7wcKb-sQ5-xBYzoH-4-Wuibtn_NKfGQb-P62Rl6sbTKpJHuW33fmo6XRop2yblA/exec';
+      const MIN_JUSTIFICATION_CHARS = 120;
       const CHART_COLORS = ['#9f402d', '#674bb5', '#296956', '#ab8ffe'];
       const DEFAULT_ALLOCATIONS = [25, 25, 25, 25];
 
       const state = {
         allocations: DEFAULT_ALLOCATIONS.slice(),
         chart: null,
-        submitting: false
+        submitting: false,
+        submissionLookupOpen: false,
+        loadingSubmissions: false,
+        submissionsLoaded: false,
+        submissions: [],
+        submissionsError: ''
       };
 
       const form = document.getElementById('allocatorForm');
@@ -709,17 +918,26 @@
       const globalError = document.getElementById('globalError');
       const chartLegend = document.getElementById('chartLegend');
       const chartCenter = document.getElementById('chartCenter');
+      const toggleSubmissionsButton = document.getElementById('toggleSubmissionsButton');
+      const refreshSubmissionsButton = document.getElementById('refreshSubmissionsButton');
+      const submissionsPanel = document.getElementById('submissionsPanel');
+      const submissionsContent = document.getElementById('submissionsContent');
 
       buildPeerCards();
       initializeChart();
       updateCountryOptions();
       syncOwnName();
       updateLabelsAndChart();
+      renderSubmissionsState();
 
       submitterNameInput.addEventListener('input', syncOwnName);
       periodSelect.addEventListener('change', onPeriodChange);
       countrySelect.addEventListener('change', onCountryChange);
       form.addEventListener('submit', handleSubmit);
+      toggleSubmissionsButton.addEventListener('click', handleSubmissionsToggle);
+      refreshSubmissionsButton.addEventListener('click', function() {
+        loadSubmissions(true);
+      });
 
       function buildPeerCards() {
         const placeholders = ['Full name', 'Group member name', 'Group member name', 'Group member name'];
@@ -741,6 +959,7 @@
             '<div class="justification-field">' +
               '<label for="peerJustification' + i + '">Justification</label>' +
               '<textarea id="peerJustification' + i + '" data-peer-index="' + i + '" placeholder="Describe their contribution..."></textarea>' +
+              '<div id="peerJustification' + i + 'Counter" class="counter-text">0 / ' + MIN_JUSTIFICATION_CHARS + ' characters</div>' +
               '<div id="peerJustification' + i + 'Error" class="error"></div>' +
             '</div>';
           peerSection.appendChild(card);
@@ -762,6 +981,14 @@
               handleAllocationInput(event);
             }
           });
+        });
+
+        getJustificationInputs().forEach(function(textarea) {
+          textarea.addEventListener('input', function(event) {
+            updateJustificationCounter(Number(event.target.dataset.peerIndex));
+            clearError('peerJustification' + event.target.dataset.peerIndex);
+          });
+          updateJustificationCounter(Number(textarea.dataset.peerIndex));
         });
       }
 
@@ -961,7 +1188,7 @@
         submitButton.disabled = true;
         submitButton.innerHTML = '<i class="ti ti-loader-2"></i> Submitting...';
 
-        fetch('https://script.google.com/macros/s/AKfycbxRhKI7wcKb-sQ5-xBYzoH-4-Wuibtn_NKfGQb-P62Rl6sbTKpJHuW33fmo6XRop2yblA/exec', {
+        fetch(GAS_EXEC_URL, {
           method: 'POST',
           mode: 'no-cors',
           body: JSON.stringify(payload)
@@ -1018,8 +1245,8 @@
 
           if (!peer.justification) {
             errors['peerJustification' + index] = 'Enter a justification.';
-          } else if (peer.justification.length < 20) {
-            errors['peerJustification' + index] = 'Use at least 20 characters.';
+          } else if (peer.justification.length < MIN_JUSTIFICATION_CHARS) {
+            errors['peerJustification' + index] = 'Use at least ' + MIN_JUSTIFICATION_CHARS + ' characters.';
           }
         });
 
@@ -1081,8 +1308,146 @@
           '</section>';
       }
 
+      function handleSubmissionsToggle() {
+        state.submissionLookupOpen = !state.submissionLookupOpen;
+        submissionsPanel.classList.toggle('hidden', !state.submissionLookupOpen);
+        toggleSubmissionsButton.setAttribute('aria-expanded', String(state.submissionLookupOpen));
+        if (state.submissionLookupOpen && !state.submissionsLoaded && !state.loadingSubmissions) {
+          loadSubmissions(false);
+          return;
+        }
+        renderSubmissionsState();
+      }
+
+      function loadSubmissions(forceRefresh) {
+        if (state.loadingSubmissions) {
+          return;
+        }
+
+        if (state.submissionsLoaded && !forceRefresh) {
+          renderSubmissionsState();
+          return;
+        }
+
+        state.loadingSubmissions = true;
+        state.submissionsError = '';
+        renderSubmissionsState();
+
+        fetch(GAS_EXEC_URL + '?action=submissions', {
+          method: 'GET'
+        })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Unable to load submissions right now.');
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            if (!data || !data.success || !Array.isArray(data.submissions)) {
+              throw new Error('Submission list was not returned.');
+            }
+
+            state.submissions = data.submissions;
+            state.submissionsLoaded = true;
+            state.submissionsError = '';
+          })
+          .catch(function(error) {
+            state.submissions = [];
+            state.submissionsLoaded = false;
+            state.submissionsError = error && error.message ? error.message : 'Unable to load submissions right now.';
+          })
+          .finally(function() {
+            state.loadingSubmissions = false;
+            renderSubmissionsState();
+          });
+      }
+
+      function renderSubmissionsState() {
+        refreshSubmissionsButton.disabled = state.loadingSubmissions;
+        refreshSubmissionsButton.innerHTML = state.loadingSubmissions
+          ? '<i class="ti ti-loader-2"></i> Refreshing...'
+          : '<i class="ti ti-refresh"></i> Refresh List';
+
+        if (!state.submissionLookupOpen) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = 'Open the list to load recent submissions.';
+          return;
+        }
+
+        if (state.loadingSubmissions) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.innerHTML = '<i class="ti ti-loader-2"></i> Loading recent submissions...';
+          return;
+        }
+
+        if (state.submissionsError) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = state.submissionsError;
+          return;
+        }
+
+        if (!state.submissions.length) {
+          submissionsContent.className = 'submission-status';
+          submissionsContent.textContent = 'No submissions have been recorded yet.';
+          return;
+        }
+
+        submissionsContent.className = 'submissions-list';
+        submissionsContent.innerHTML = state.submissions.map(function(entry) {
+          return (
+            '<article class="submission-card">' +
+              '<h3 class="submission-name">' + escapeHtml(entry.submitterName || 'Unnamed Student') + '</h3>' +
+              '<div class="submission-meta">' + escapeHtml(formatSubmissionMeta(entry.period, entry.country)) + '</div>' +
+              '<div class="submission-time">Submitted: ' + escapeHtml(formatTimestamp(entry.timestamp)) + '</div>' +
+            '</article>'
+          );
+        }).join('');
+      }
+
+      function formatSubmissionMeta(period, country) {
+        const periodLabel = period ? 'Period ' + String(period) : 'Period not listed';
+        const countryLabel = country || 'Country not listed';
+        return periodLabel + ' • ' + countryLabel;
+      }
+
+      function formatTimestamp(timestamp) {
+        if (!timestamp) {
+          return 'Time unavailable';
+        }
+
+        const parsed = new Date(timestamp);
+        if (Number.isNaN(parsed.getTime())) {
+          return String(timestamp);
+        }
+
+        return new Intl.DateTimeFormat(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        }).format(parsed);
+      }
+
+      function updateJustificationCounter(index) {
+        const textarea = document.getElementById('peerJustification' + index);
+        const counter = document.getElementById('peerJustification' + index + 'Counter');
+        if (!textarea || !counter) {
+          return;
+        }
+
+        const count = textarea.value.trim().length;
+        counter.textContent = count + ' / ' + MIN_JUSTIFICATION_CHARS + ' characters';
+        counter.classList.toggle('complete', count >= MIN_JUSTIFICATION_CHARS);
+        textarea.classList.toggle('counter-complete', count >= MIN_JUSTIFICATION_CHARS);
+      }
+
       function getNameInputs() {
         return Array.from(document.querySelectorAll('input[type="text"][data-peer-index]'));
+      }
+
+      function getJustificationInputs() {
+        return Array.from(document.querySelectorAll('textarea[data-peer-index]'));
       }
 
       function getAllocationInputs() {

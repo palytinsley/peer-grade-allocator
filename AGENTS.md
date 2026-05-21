@@ -33,3 +33,6 @@ Tabler Icons via jsDelivr CDN only.
 
 ## Deployment
 Script editor → Deploy → Manage Deployments → New Version. Deploy as Web App, access: Anyone.
+
+## Workflow Expectation
+- After completing requested project updates, push the GAS code with `clasp` and push the corresponding git commit to GitHub unless the user explicitly says not to.
