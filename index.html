@@ -1333,22 +1333,39 @@
         state.submissionsError = '';
         renderSubmissionsState();
 
-        google.script.run
-          .withSuccessHandler(function(submissions) {
-            state.submissions = submissions;
-            state.submissionsLoaded = true;
-            state.submissionsError = '';
-            state.loadingSubmissions = false;
-            renderSubmissionsState();
+        const handleSuccess = function(submissions) {
+          state.submissions = submissions;
+          state.submissionsLoaded = true;
+          state.submissionsError = '';
+          state.loadingSubmissions = false;
+          renderSubmissionsState();
+        };
+
+        const handleFailure = function(error) {
+          state.submissions = [];
+          state.submissionsLoaded = false;
+          state.submissionsError = error && error.message ? error.message : 'Unable to load submissions right now.';
+          state.loadingSubmissions = false;
+          renderSubmissionsState();
+        };
+
+        fetch(GAS_EXEC_URL + '?action=submissions', {
+          mode: 'cors'
+        })
+          .then(function(response) {
+            return response.json();
           })
-          .withFailureHandler(function(error) {
-            state.submissions = [];
-            state.submissionsLoaded = false;
-            state.submissionsError = error && error.message ? error.message : 'Unable to load submissions right now.';
-            state.loadingSubmissions = false;
-            renderSubmissionsState();
+          .then(function(data) {
+            if (!data || data.success === false) {
+              handleFailure(new Error(data && data.error ? data.error : 'Unable to load submissions right now.'));
+              return;
+            }
+
+            handleSuccess(data.submissions);
           })
-          .getSubmissionSummaries();
+          .catch(function(error) {
+            handleFailure(new Error(error && error.message ? error.message : 'Unable to load submissions right now.'));
+          });
       }
 
       function renderSubmissionsState() {
