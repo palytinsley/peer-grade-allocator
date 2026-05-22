@@ -147,6 +147,113 @@
         display: block;
       }
 
+      .guidance-shell {
+        margin-bottom: 32px;
+        border: 1px solid var(--outline-variant);
+        border-radius: 1.25rem;
+        background:
+          linear-gradient(135deg, rgba(171, 143, 254, 0.07), rgba(97, 159, 138, 0.07)),
+          var(--surface-low);
+        overflow: hidden;
+      }
+
+      .guidance-shell summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 24px;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .guidance-shell summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .guidance-summary-main {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .guidance-summary-main i,
+      .guidance-chevron {
+        flex-shrink: 0;
+        color: var(--primary);
+      }
+
+      .guidance-summary-main i {
+        font-size: 21px;
+      }
+
+      .guidance-summary-label {
+        color: var(--primary);
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .guidance-chevron {
+        font-size: 20px;
+        transition: transform 0.24s ease;
+      }
+
+      .guidance-shell[open] .guidance-chevron {
+        transform: rotate(180deg);
+      }
+
+      .guidance-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.28s ease;
+      }
+
+      .guidance-shell[open] .guidance-content {
+        grid-template-rows: 1fr;
+      }
+
+      .guidance-content-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .guidance-copy {
+        padding: 0 24px 24px;
+        border-top: 1px solid var(--outline-variant);
+      }
+
+      .guidance-intro {
+        padding-top: 18px;
+        color: var(--on-surface-variant);
+      }
+
+      .guidance-list {
+        display: grid;
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .guidance-item {
+        display: grid;
+        gap: 6px;
+      }
+
+      .guidance-kicker {
+        color: var(--outline);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .guidance-item p {
+        color: var(--on-surface-variant);
+      }
+
       .form-flow {
         display: grid;
         gap: 32px;
@@ -743,6 +850,21 @@
           font-size: 16px;
         }
 
+        .guidance-shell {
+          margin-bottom: 24px;
+          border-radius: 1rem;
+        }
+
+        .guidance-shell summary,
+        .guidance-copy {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+
+        .guidance-summary-label {
+          font-size: 24px;
+        }
+
         .field-grid,
         .peer-list {
           grid-template-columns: 1fr;
@@ -800,6 +922,39 @@
       </section>
 
       <main id="appRoot" class="workspace">
+        <details class="guidance-shell">
+          <summary>
+            <span class="guidance-summary-main">
+              <i class="ti ti-info-circle" aria-hidden="true"></i>
+              <span class="guidance-summary-label">How should I think about allocation?</span>
+            </span>
+            <i class="ti ti-chevron-down guidance-chevron" aria-hidden="true"></i>
+          </summary>
+          <div class="guidance-content">
+            <div class="guidance-content-inner">
+              <div class="guidance-copy">
+                <p class="guidance-intro">
+                  Before assigning each person's percentage, consider how they performed across the following areas:
+                </p>
+                <div class="guidance-list">
+                  <div class="guidance-item">
+                    <div class="guidance-kicker">Group Work</div>
+                    <p>Did this person carry their share of the workload, communicate reliably with the group, and step up when the team needed support?</p>
+                  </div>
+                  <div class="guidance-item">
+                    <div class="guidance-kicker">Effort and Initiative</div>
+                    <p>Was this person actively engaged during build sessions - working independently, following through on their responsibilities, and contributing beyond what was asked of them?</p>
+                  </div>
+                  <div class="guidance-item">
+                    <div class="guidance-kicker">Professionalism</div>
+                    <p>Did this person show up on time, execute their show night role effectively, and conduct themselves with professionalism throughout the event?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
         <form id="allocatorForm" class="form-flow" novalidate>
           <div id="globalError" class="global-error hidden"></div>
 
